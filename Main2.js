@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Lang Annotations Checker & IMDb Link Converter
 // @namespace    http://tampermonkey.net/
-// @version      1.4
+// @version      1.5
 // @description  Checks for language annotations and converts IMDb IDs to clickable links
 // @match        https://*/tasks/*
 // @grant        none
@@ -72,7 +72,7 @@
                 imdbLink.textContent = imdbId;
 
                 // Replace the original <span> content with the <a> link
-                imdbIdCell.replaceWith(imdbLink);
+                imdbIdCell.parentNode.replaceChild(imdbLink, imdbIdCell);
             } else {
                 console.warn("IMDb ID format is invalid or not present:", imdbId);
             }
@@ -97,7 +97,7 @@
     // Start observing the document for mutations
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // Call IMDb ID link converter function
-    convertImdbIdToLink();
+    // Call IMDb ID link converter function with a delay to ensure the page is fully loaded
+    setTimeout(convertImdbIdToLink, 3000); // 3-second delay to ensure element is loaded
 
 })();
