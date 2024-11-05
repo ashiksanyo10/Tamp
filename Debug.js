@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         IMDb ID Logger (with adjacent cell lookup)
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  Logs IMDb ID to console for debugging
 // @match        https://*/tasks/*
 // @grant        none
@@ -16,12 +16,17 @@
         const imdbLabelCell = document.querySelector('td.css-lemlyl span');
 
         if (imdbLabelCell && imdbLabelCell.textContent.trim() === "IMDB Id") {
-            // If label is found, select the next sibling cell containing the IMDb ID
+            // Find the IMDb ID in the adjacent cell
             const imdbIdCell = imdbLabelCell.closest('td').nextElementSibling.querySelector('span');
 
             if (imdbIdCell) {
                 // Log the IMDb ID to console
-                console.log("IMDb ID found:", imdbIdCell.textContent.trim());
+                const imdbIdValue = imdbIdCell.textContent.trim();
+                console.log("IMDb ID found:", imdbIdValue);
+                
+                // Here, you can create a hyperlink if needed
+                const imdbLink = `https://www.imdb.com/title/${imdbIdValue}`;
+                console.log("IMDb link:", imdbLink);
             } else {
                 console.warn("IMDb ID value element not found.");
             }
